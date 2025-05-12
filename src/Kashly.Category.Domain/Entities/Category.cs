@@ -4,11 +4,12 @@ namespace Kashly.Category.Domain.Entities;
 
 public class Category
 {
-    public const int MaxDescriptionLength = 100;
     public const int MaxIconLength = 50;
     public const int MaxColorLength = 7;
+    public const int MaxUserIdLength = 450; // Default max length for ASP.NET Identity user IDs
+    public const int MaxDescriptionLength = 100;
 
-    public int Id { get; private set; }
+    public int Id { get; }
     public CategoryType Type { get; private set; }
     public string Description { get; private set; } = string.Empty;
     public string Icon { get; private set; } = string.Empty;
@@ -19,9 +20,10 @@ public class Category
     public string UserId { get; private set; } = string.Empty;
 
     public bool IsDeleted => this.DeletedAt.HasValue;
+
     public bool IsActive => this.DeletedAt == null;
 
-    protected Category() {}
+    protected Category() { }
 
     public Category(CategoryType type, string description, string icon, string color, string userId)
     {
@@ -57,14 +59,5 @@ public class Category
             throw new InvalidOperationException("Category is not deleted.");
         }
         this.DeletedAt = null;
-    }
-
-    public void AssignUser(string userId)
-    {
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-        }
-        this.UserId = userId;
     }
 }

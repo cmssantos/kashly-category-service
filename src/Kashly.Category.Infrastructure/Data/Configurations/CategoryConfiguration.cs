@@ -30,7 +30,7 @@ internal class CategoryConfiguration : IEntityTypeConfiguration<Domain.Entities.
 
         builder.Property(c => c.UserId)
             .IsRequired()
-            .HasMaxLength(450); // Default max length for ASP.NET Identity user IDs
+            .HasMaxLength(Domain.Entities.Category.MaxUserIdLength);
 
         builder.HasIndex(c => new { c.Description, c.Type, c.UserId })
             .IsUnique()

@@ -13,11 +13,13 @@ internal class CreateCategoryUseCase(
     IMapper mapper,
     ILocalizer localizer,
     IUserContext userContext,
+    IValidatorService validator,
     ILogger<CreateCategoryUseCase> logger,
     IReadCategoryRepository readRepository,
     IWriteCategoryRepository writeRepository) : ICreateCategoryUseCase
 {
     private readonly IMapper mapper = mapper;
+    private readonly IValidatorService validator = validator;
     private readonly ILocalizer localizer = localizer;
     private readonly IUserContext userContext = userContext;
     private readonly ILogger<CreateCategoryUseCase> logger = logger;
@@ -27,14 +29,17 @@ internal class CreateCategoryUseCase(
     public async Task<int> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
         var userId = this.userContext.UserId;
+        this.validator.Validate(request, new CategoryRequestValidator(this.localizer));
 
         var categoryExists = await this.readRepository
             .ExistsAsync((CategoryType)request.Type, request.Description, userId, cancellationToken);
 
         if (categoryExists)
         {
-            this.logger.LogWarning("Category creation failed. Conflict: Description '{Description}' already exists for UserId {UserId}.",
-                request.Description, userId);
+            this.logger.LogWarning(
+                "Category creation failed. Conflict: Description '{Description}' with Type '{Type}' already exists for UserId {UserId}.",
+                request.Description, request.Type, userId
+            );
             throw new ConflictException(this.localizer.GetString("error.conflict").Value);
         }
 

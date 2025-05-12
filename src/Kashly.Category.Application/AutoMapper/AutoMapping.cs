@@ -25,5 +25,10 @@ internal class AutoMapping : Profile
 
     private void EntityToResponse()
     {
+        CreateMap<Domain.Entities.Category, Communication.Responses.CategoryShortResponse>()
+           .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
+
+        CreateMap<Domain.Entities.Category, Communication.Responses.CategoryResponse>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
     }
 }

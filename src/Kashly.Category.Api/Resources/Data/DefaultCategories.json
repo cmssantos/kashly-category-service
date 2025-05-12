@@ -1,0 +1,20 @@
+[
+  {
+    "Type": "Expense",
+    "Name": "Food",
+    "Icon": "food-icon",
+    "Color": "food-color"
+  },
+  {
+    "Type": "Expense",
+    "Name": "Transport",
+    "Icon": "transport-icon",
+    "Color": "transport-color"
+  },
+  {
+    "Type": "Income",
+    "Name": "Salary",
+    "Icon": "salary-icon",
+    "Color": "salary-color"
+  }
+]

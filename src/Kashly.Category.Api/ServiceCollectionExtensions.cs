@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddCustomLocalization(this IServiceCollection services)
     {
-        services.AddJsonLocalizer(Path.Combine(Directory.GetCurrentDirectory(), "Resources"));
+        services.AddJsonLocalizer(Path.Combine(Directory.GetCurrentDirectory(), "Resources", "Localization"));
         return services;
     }
 

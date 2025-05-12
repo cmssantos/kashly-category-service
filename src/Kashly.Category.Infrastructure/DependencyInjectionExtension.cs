@@ -1,9 +1,12 @@
 using Kashly.Category.Domain.Interfaces;
 using Kashly.Category.Infrastructure.Data;
+using Kashly.Category.Infrastructure.Data.Configurations;
 using Kashly.Category.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
 
 namespace Kashly.Category.Infrastructure;
 
@@ -11,23 +14,50 @@ public static class DependencyInjectionExtension
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        AddDbContext(services);
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        
+        services.Configure<DatabaseSettings>(options =>
+        {
+            configuration.GetSection("DatabaseSettings").Bind(options);
+        });
+
+        AddDbContexts(services);
         AddRepositories(services);
+
         MigrateDbContext(services.BuildServiceProvider());
 
         return services;
     }
 
-    private static void AddDbContext(IServiceCollection services)
+    private static void AddDbContexts(IServiceCollection services)
     {
-        ServiceProvider serviceProvider = services.BuildServiceProvider();
-        IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        services.AddScoped(sp =>
+        {
+            IOptions<DatabaseSettings> options = sp.GetRequiredService<IOptions<DatabaseSettings>>();
+            IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<ReadDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            return new ReadDbContext(
+                new DbContextOptionsBuilder<ReadDbContext>()
+                    .UseNpgsql(connectionString)
+                    .Options,
+                options
+            );
+        });
 
-        services.AddDbContext<WriteDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddScoped(sp =>
+        {
+            IOptions<DatabaseSettings> options = sp.GetRequiredService<IOptions<DatabaseSettings>>();
+            IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            return new WriteDbContext(
+                new DbContextOptionsBuilder<WriteDbContext>()
+                    .UseNpgsql(connectionString)
+                    .Options,
+                options
+            );
+        });
     }
 
     private static void AddRepositories(IServiceCollection services)
@@ -39,9 +69,7 @@ public static class DependencyInjectionExtension
     private static void MigrateDbContext(IServiceProvider serviceProvider)
     {
         using IServiceScope scope = serviceProvider.CreateScope();
-        IServiceProvider scopedServiceProvider = scope.ServiceProvider;
-
-        using WriteDbContext dbContext = scopedServiceProvider.GetRequiredService<WriteDbContext>();
+        WriteDbContext dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
         dbContext.Database.Migrate();
     }
 }

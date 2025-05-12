@@ -8,13 +8,6 @@
     "badRequest": "The request is invalid or malformed.",
     "validationError": "One or more validation errors occurred."
   },
-  "success": {
-    "created": "The resource was successfully created.",
-    "updated": "The resource was successfully updated.",
-    "deleted": "The resource was successfully deleted.",
-    "retrieved": "The resource was successfully retrieved.",
-    "processed": "The request was successfully processed."
-  },
   "validation": {
     "required": "The field '{0}' is required.",
     "invalidFormat": "The field '{0}' has an invalid format.",
@@ -22,10 +15,5 @@
     "minLength": "The field '{0}' must have at least {1} characters.",
     "range": "The field '{0}' must be between {1} and {2}.",
     "invalidValue": "The value provided for the field '{0}' is invalid."
-  },
-  "info": {
-    "processing": "The request is being processed.",
-    "partialContent": "Partial content has been returned.",
-    "noContent": "The operation was successful, but there is no content to return."
   }
 }

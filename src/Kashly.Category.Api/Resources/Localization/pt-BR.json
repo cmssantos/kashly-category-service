@@ -8,13 +8,6 @@
     "badRequest": "A solicitação é inválida ou está malformada.",
     "validationError": "Um ou mais erros de validação ocorreram."
   },
-  "success": {
-    "created": "O recurso foi criado com sucesso.",
-    "updated": "O recurso foi atualizado com sucesso.",
-    "deleted": "O recurso foi excluído com sucesso.",
-    "retrieved": "O recurso foi recuperado com sucesso.",
-    "processed": "A solicitação foi processada com sucesso."
-  },
   "validation": {
     "required": "O campo '{0}' é obrigatório.",
     "invalidFormat": "O campo '{0}' está em um formato inválido.",
@@ -22,10 +15,5 @@
     "minLength": "O campo '{0}' deve ter pelo menos {1} caracteres.",
     "range": "O campo '{0}' deve estar entre {1} e {2}.",
     "invalidValue": "O valor fornecido para o campo '{0}' é inválido."
-  },
-  "info": {
-    "processing": "A solicitação está sendo processada.",
-    "partialContent": "Conteúdo parcial foi retornado.",
-    "noContent": "A operação foi bem-sucedida, mas não há conteúdo para retornar."
   }
 }

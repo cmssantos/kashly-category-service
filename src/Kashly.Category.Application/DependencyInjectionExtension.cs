@@ -1,6 +1,7 @@
 using Kashly.Category.Application.Interfaces;
 using Kashly.Category.Application.Services;
 using Kashly.Category.Application.UseCases.Create;
+using Kashly.Category.Application.UseCases.CreateDefault;
 using Kashly.Category.Application.UseCases.GetById;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,11 +22,16 @@ public static class DependencyInjectionExtension
         => services.AddAutoMapper(typeof(DependencyInjectionExtension));
 
     private static void AddServices(IServiceCollection services)
-        => services.AddScoped<IUserContext, UserContext>();
+    {
+        services.AddScoped<IValidatorService, ValidationService>();
+        services.AddScoped<IUserContext, UserContext>();
+    }
 
     private static void AddUseCases(IServiceCollection services)
     {
         services.AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>();
+        services.AddScoped<ICreateDefaultCategoriesUseCase, CreateDefaultCategoriesUseCase>();
         services.AddScoped<IGetByIdCategoryUseCase, GetByIdCategoryUseCase>();
+
     }
 }
