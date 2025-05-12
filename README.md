@@ -1,0 +1,1 @@
+# kashly-category-service
