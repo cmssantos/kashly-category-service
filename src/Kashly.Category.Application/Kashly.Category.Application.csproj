@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Kashly.Category.Communication/Kashly.Category.Communication.csproj" />
+    <ProjectReference Include="../Kashly.Category.Domain/Kashly.Category.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Cms.AspNetCore.JsonLocalizer" Version="1.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
+  </ItemGroup>
+
+</Project>
