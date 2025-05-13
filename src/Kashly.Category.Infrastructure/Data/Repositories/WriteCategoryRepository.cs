@@ -4,23 +4,23 @@ namespace Kashly.Category.Infrastructure.Data.Repositories;
 
 internal class WriteCategoryRepository(WriteDbContext dbContext) : IWriteCategoryRepository
 {
-    private readonly WriteDbContext dbContext = dbContext;
+    private readonly WriteDbContext _dbContext = dbContext;
 
     public async Task<Domain.Entities.Category> SaveAsync(Domain.Entities.Category category,
         CancellationToken cancellationToken)
     {
         if (category.Id == 0)
         {
-            await this.dbContext.Set<Domain.Entities.Category>()
+            await _dbContext.Set<Domain.Entities.Category>()
                 .AddAsync(category, cancellationToken);
         }
         else
         {
-            this.dbContext.Set<Domain.Entities.Category>()
+            _dbContext.Set<Domain.Entities.Category>()
                 .Update(category);
         }
 
-        await this.dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return category;
     }

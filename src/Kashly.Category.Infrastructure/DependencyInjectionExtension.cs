@@ -12,16 +12,15 @@ namespace Kashly.Category.Infrastructure;
 
 public static class DependencyInjectionExtension
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        var configuration = sp.GetRequiredService<IConfiguration>();
-        
         services.Configure<DatabaseSettings>(options =>
         {
             configuration.GetSection("DatabaseSettings").Bind(options);
         });
 
-        AddDbContexts(services);
+        AddDbContexts(services, configuration);
         AddRepositories(services);
 
         MigrateDbContext(services.BuildServiceProvider());
@@ -29,12 +28,11 @@ public static class DependencyInjectionExtension
         return services;
     }
 
-    private static void AddDbContexts(IServiceCollection services)
+    private static void AddDbContexts(IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped(sp =>
         {
             IOptions<DatabaseSettings> options = sp.GetRequiredService<IOptions<DatabaseSettings>>();
-            IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             return new ReadDbContext(

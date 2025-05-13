@@ -8,11 +8,11 @@ namespace Kashly.Category.Api;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomServices(this IServiceCollection services)
+    public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
         services.AddApplicationServices();
-        services.AddInfrastructureServices();
+        services.AddInfrastructureServices(configuration);
         services.AddCustomCors();
         services.AddCustomLocalization();
         services.AddCustomControllers();

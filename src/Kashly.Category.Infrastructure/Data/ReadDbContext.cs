@@ -7,13 +7,13 @@ namespace Kashly.Category.Infrastructure.Data;
 internal class ReadDbContext(DbContextOptions<ReadDbContext> options, IOptions<DatabaseSettings> config)
     : DbContext(options)
 {
-    private readonly string schema = config.Value.Schema;
+    private readonly string _schema = config.Value.Schema;
 
     public DbSet<Domain.Entities.Category> Categories { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema(this.schema);
+        modelBuilder.HasDefaultSchema(_schema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ReadDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);

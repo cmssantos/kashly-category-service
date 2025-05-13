@@ -19,45 +19,60 @@ public class Category
     public DateTime? DeletedAt { get; private set; }
     public string UserId { get; private set; } = string.Empty;
 
-    public bool IsDeleted => this.DeletedAt.HasValue;
+    public bool IsDeleted => DeletedAt.HasValue;
 
-    public bool IsActive => this.DeletedAt == null;
+    public bool IsActive => DeletedAt == null;
 
     protected Category() { }
 
     public Category(CategoryType type, string description, string icon, string color, string userId)
     {
-        this.Type = type;
-        this.Icon = icon;
-        this.Color = color;
-        this.UserId = userId;
-        this.Description = description;
-        this.CreatedAt = DateTime.UtcNow;
+        Type = type;
+        Icon = icon;
+        Color = color;
+        UserId = userId;
+        Description = description;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public void Update(string description, string icon, string color)
     {
-        this.Icon = icon;
-        this.Color = color;
-        this.Description = description;
-        this.UpdatedAt = DateTime.UtcNow;
+        Icon = icon;
+        Color = color;
+        Description = description;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void Delete()
     {
-        if (this.IsDeleted)
+        if (IsDeleted)
         {
             throw new InvalidOperationException("Category is already deleted.");
         }
-        this.DeletedAt = DateTime.UtcNow;
+        DeletedAt = DateTime.UtcNow;
     }
 
     public void Restore()
     {
-        if (!this.IsDeleted)
+        if (!IsDeleted)
         {
             throw new InvalidOperationException("Category is not deleted.");
         }
-        this.DeletedAt = null;
+        DeletedAt = null;
+    }
+
+    public void AssignUser(string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
+        }
+
+        if (userId.Length > MaxUserIdLength)
+        {
+            throw new ArgumentException($"User ID cannot exceed {MaxUserIdLength} characters.", nameof(userId));
+        }
+
+        UserId = userId;
     }
 }

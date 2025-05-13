@@ -8,8 +8,8 @@ namespace Kashly.Category.Api.Filters;
 
 public class ExceptionFilter(ILocalizer localizer, ILogger<ExceptionFilter> logger) : IExceptionFilter
 {
-    private readonly ILocalizer localizer = localizer;
-    private readonly ILogger<ExceptionFilter> logger = logger;
+    private readonly ILocalizer _localizer = localizer;
+    private readonly ILogger<ExceptionFilter> _logger = logger;
 
     public void OnException(ExceptionContext context)
     {
@@ -26,7 +26,7 @@ public class ExceptionFilter(ILocalizer localizer, ILogger<ExceptionFilter> logg
     private static void HandleApplicationException(ExceptionContext context)
     {
         var cashControlException = context.Exception as KashlyException;
-        var errorResponse = new ResponseErrorJson(cashControlException!.GetErrors());
+        var errorResponse = new ResponseErrorJson(errorMessages: cashControlException!.GetErrors());
 
         context.HttpContext.Response.StatusCode = cashControlException.StatusCode;
         context.Result = new ObjectResult(errorResponse);
@@ -35,10 +35,10 @@ public class ExceptionFilter(ILocalizer localizer, ILogger<ExceptionFilter> logg
     private void ThrowUnhandledException(ExceptionContext context)
     {
         // Log the unhandled exception
-        this.logger.LogError(context.Exception, "Unhandled exception occurred. Path: {Path}, UserId: {UserId}",
+        _logger.LogError(context.Exception, "Unhandled exception occurred. Path: {Path}, UserId: {UserId}",
             context.HttpContext.Request.Path, context.HttpContext.User?.Identity?.Name);
 
-        var errorResponse = new ResponseErrorJson(this.localizer.GetString("error.serverError").Value);
+        var errorResponse = new ResponseErrorJson(errorMessage: _localizer.GetString("error.serverError").Value);
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         context.Result = new ObjectResult(errorResponse);

@@ -4,7 +4,7 @@ namespace Kashly.Category.Domain.Exceptions;
 
 public class ErrorOnValidationException(List<string> errorMessages) : KashlyException(string.Empty)
 {
-    public readonly List<string> errors = errorMessages;
+    public readonly List<string> Errors = errorMessages;
     public override int StatusCode => (int)HttpStatusCode.BadRequest;
-    public override List<string> GetErrors() => this.errors;
+    public override List<string> GetErrors() => Errors;
 }

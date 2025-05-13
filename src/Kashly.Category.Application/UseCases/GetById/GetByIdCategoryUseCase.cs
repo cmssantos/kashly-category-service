@@ -16,25 +16,24 @@ public class GetByIdCategoryUseCase(
     IReadCategoryRepository readRepository,
     ILogger<GetByIdCategoryUseCase> logger) : IGetByIdCategoryUseCase
 {
-    private readonly IMapper mapper = mapper;
-    private readonly ILocalizer localizer = localizer;
-    private readonly IUserContext userContext = userContext;
-    private readonly ILogger<GetByIdCategoryUseCase> logger = logger;
-    private readonly IReadCategoryRepository readRepository = readRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly ILocalizer _localizer = localizer;
+    private readonly IUserContext _userContext = userContext;
+    private readonly ILogger<GetByIdCategoryUseCase> _logger = logger;
+    private readonly IReadCategoryRepository _readRepository = readRepository;
 
     public async Task<CategoryResponse> Handle(GetByIdCategoryRequest request, CancellationToken cancellationToken)
     {
-        var userId = this.userContext.UserId;
+        var userId = _userContext.UserId;
 
-        Domain.Entities.Category? category = await this.readRepository.GetByIdAsync(request.Id, userId, cancellationToken);
+        Domain.Entities.Category? category = await _readRepository.GetByIdAsync(request.Id, userId, cancellationToken);
         if (category is null)
         {
-            this.logger.LogWarning("Category not found. Id: {Id}, UserId: {UserId}.", request.Id, userId);
-            throw new NotFoundException(this.localizer.GetString("error.notFound").Value);
+            _logger.LogWarning("Category not found. Id: {Id}, UserId: {UserId}.", request.Id, userId);
+            throw new NotFoundException(_localizer.GetString("error.notFound").Value);
         }
 
-        this.logger.LogInformation("Category retrieved successfully. Id: {Id}, UserId: {UserId}.", request.Id, userId);
-
-        return this.mapper.Map<CategoryResponse>(category);
+        _logger.LogInformation("Category retrieved successfully. Id: {Id}, UserId: {UserId}.", request.Id, userId);
+        return _mapper.Map<CategoryResponse>(category);
     }
 }

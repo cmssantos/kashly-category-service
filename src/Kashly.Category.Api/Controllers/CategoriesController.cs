@@ -1,5 +1,4 @@
 using Kashly.Category.Application.UseCases.Create;
-using Kashly.Category.Application.UseCases.CreateDefault;
 using Kashly.Category.Application.UseCases.GetById;
 using Kashly.Category.Communication.Requests;
 using Kashly.Category.Communication.Responses;
@@ -11,26 +10,6 @@ namespace Kashly.Category.Api.Controllers;
 [Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
-    /// <summary>
-    /// Initializes the user categories by creating default categories.
-    /// This endpoint is intended for use when the user has no categories.
-    /// </summary>
-    /// <param name="useCase">The use case for creating default categories.</param>
-    /// <remarks>
-    /// This endpoint is used to initialize the user categories.
-    /// It creates default categories for the user.
-    /// The request body should be empty.
-    /// </remarks>
-    /// <returns>No content.</returns>
-    [HttpPost("init")]
-    [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> InitializeUserCategories(
-        [FromServices] ICreateDefaultCategoriesUseCase useCase)
-    {
-        await useCase.Handle(this.HttpContext.RequestAborted);
-        return Ok();
-    }
-
     /// <summary>
     /// Retrieves a category by its ID.
     /// </summary>
@@ -50,7 +29,7 @@ public class CategoriesController : ControllerBase
         [FromRoute] int id)
     {
         CategoryResponse category = await useCase.Handle(new
-            GetByIdCategoryRequest(id), this.HttpContext.RequestAborted);
+            GetByIdCategoryRequest(id), cancellationToken: HttpContext.RequestAborted);
 
         return Ok(category);
     }
@@ -73,7 +52,7 @@ public class CategoriesController : ControllerBase
         [FromServices] ICreateCategoryUseCase useCase,
         [FromBody] CreateCategoryRequest request)
     {
-        var createdCategoryId = await useCase.Handle(request, this.HttpContext.RequestAborted);
+        var createdCategoryId = await useCase.Handle(request, cancellationToken: HttpContext.RequestAborted);
 
         return CreatedAtAction(nameof(GetCategoryById), new
         {
