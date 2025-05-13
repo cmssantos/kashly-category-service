@@ -1,3 +1,4 @@
+using Kashly.Category.Application.UseCases.Archive;
 using Kashly.Category.Application.UseCases.Create;
 using Kashly.Category.Application.UseCases.GetById;
 using Kashly.Category.Communication.Requests;
@@ -58,5 +59,14 @@ public class CategoriesController : ControllerBase
         {
             id = createdCategoryId
         }, new { id = createdCategoryId });
+    }
+
+    [HttpPost("{id:int}/archive")]
+    public async Task<IActionResult> ArchiveCategory(
+        [FromServices] IArchiveCategoryUseCase useCase,
+        [FromRoute] int id)
+    {
+        await useCase.Handle(new ArchiveCategoryRequest(id), cancellationToken: HttpContext.RequestAborted);
+        return NoContent();
     }
 }

@@ -1,5 +1,6 @@
 using Kashly.Category.Application.Interfaces;
 using Kashly.Category.Application.Services;
+using Kashly.Category.Application.UseCases.Archive;
 using Kashly.Category.Application.UseCases.Create;
 using Kashly.Category.Application.UseCases.GetById;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,6 @@ public static class DependencyInjectionExtension
     {
         services.AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>();
         services.AddScoped<IGetByIdCategoryUseCase, GetByIdCategoryUseCase>();
-
+        services.AddScoped<IArchiveCategoryUseCase, ArchiveCategoryUseCase>();
     }
 }
